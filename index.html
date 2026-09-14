@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mansoori Mohd Kaif — Cloud & DevOps Engineer</title>
+<meta name="description" content="Mansoori Mohd Kaif — Cloud Computing & DevOps enthusiast. AWS Certified. Building infrastructure with Terraform, Docker & Kubernetes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#080A0E;
+    --bg-panel:#0F141B;
+    --bg-panel2:#131922;
+    --border:#1C2430;
+    --border-bright:#2A3542;
+    --teal:#2DD4BF;
+    --teal-glow:rgba(45,212,191,0.35);
+    --teal-dim:#1A8F81;
+    --amber:#F5A623;
+    --violet:#8B94FF;
+    --text:#EDF1F5;
+    --muted:#8892A0;
+    --muted2:#4E5866;
+    --mono:'IBM Plex Mono', monospace;
+    --sans:'Inter', sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    overflow-x:hidden;
+    background-image:
+      radial-gradient(circle at 15% 8%, rgba(45,212,191,0.07), transparent 42%),
+      radial-gradient(circle at 88% 22%, rgba(245,166,35,0.05), transparent 40%),
+      radial-gradient(circle at 50% 90%, rgba(139,148,255,0.05), transparent 45%),
+      linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+    background-size:auto, auto, auto, 46px 46px, 46px 46px;
+  }
+  ::selection{background:var(--teal);color:#001410;}
+  a{color:inherit;text-decoration:none;}
+  ::-webkit-scrollbar{width:9px;}
+  ::-webkit-scrollbar-track{background:var(--bg);}
+  ::-webkit-scrollbar-thumb{background:var(--border-bright);border-radius:8px;}
+  ::-webkit-scrollbar-thumb:hover{background:var(--teal-dim);}
+
+  /* ---------- CURSOR GLOW ---------- */
+  #cursorGlow{
+    position:fixed;width:420px;height:420px;border-radius:50%;
+    pointer-events:none;z-index:5;
+    background:radial-gradient(circle, rgba(45,212,191,0.06), transparent 70%);
+    transform:translate(-50%,-50%);
+    transition:opacity .3s;
+    top:0;left:0;opacity:0;
+  }
+  @media(hover:hover){#cursorGlow{opacity:1;}}
+
+  /* ---------- LOADER ---------- */
+  #loader{
+    position:fixed;inset:0;background:var(--bg);z-index:999;
+    display:flex;align-items:center;justify-content:center;flex-direction:column;
+    transition:opacity .6s ease, visibility .6s ease;
+  }
+  #loader.hide{opacity:0;visibility:hidden;}
+  .loader-term{font-family:var(--mono);font-size:14px;color:var(--teal);text-align:left;min-width:280px;}
+  .loader-term div{margin-bottom:6px;opacity:0;animation:fadeIn .4s forwards;}
+  .loader-term div:nth-child(1){animation-delay:.1s;}
+  .loader-term div:nth-child(2){animation-delay:.5s;}
+  .loader-term div:nth-child(3){animation-delay:.9s;}
+  .loader-term div:nth-child(4){animation-delay:1.3s;}
+  @keyframes fadeIn{to{opacity:1;}}
+  .loader-bar{width:280px;height:3px;background:var(--border);border-radius:3px;margin-top:16px;overflow:hidden;}
+  .loader-bar-fill{height:100%;background:linear-gradient(90deg,var(--teal-dim),var(--teal));width:0%;animation:loadBar 1.7s ease forwards;}
+  @keyframes loadBar{to{width:100%;}}
+  .loader-sub{color:var(--muted2);font-size:11px;margin-top:10px;}
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 6vw;
+    background:rgba(8,10,14,0.65);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--border);
+    transition:background .3s, border-color .3s;
+  }
+  .logo{font-family:var(--mono);font-weight:600;font-size:15px;color:var(--text);display:flex;align-items:center;gap:8px;}
+  .logo-badge{
+    width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,var(--teal),var(--teal-dim));
+    display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#001410;
+  }
+  .nav-links{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:13px;color:var(--muted);}
+  .nav-links a{
+    padding:8px 14px;border-radius:6px;transition:color .2s, background .2s;position:relative;
+  }
+  .nav-links a:hover{color:var(--teal);background:rgba(45,212,191,0.06);}
+  .nav-links a.active{color:var(--teal);background:rgba(45,212,191,0.08);}
+  .nav-cta{
+    font-family:var(--mono);font-size:12px;font-weight:600;color:#001410;
+    background:var(--teal);padding:9px 18px;border-radius:6px;margin-left:8px;
+    transition:transform .2s, box-shadow .2s;
+  }
+  .nav-cta:hover{transform:translateY(-2px);box-shadow:0 6px 20px var(--teal-glow);}
+
+  .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;z-index:200;}
+  .hamburger span{width:24px;height:2px;background:var(--text);transition:.3s;}
+  .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .hamburger.open span:nth-child(2){opacity:0;}
+  .hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+  .mobile-menu{
+    position:fixed;inset:0;background:rgba(8,10,14,0.98);backdrop-filter:blur(10px);
+    z-index:150;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:28px;transform:translateY(-100%);transition:transform .4s ease;
+  }
+  .mobile-menu.open{transform:translateY(0);}
+  .mobile-menu a{font-family:var(--mono);font-size:22px;color:var(--text);}
+  .mobile-menu a:hover{color:var(--teal);}
+
+  @media(max-width:820px){
+    .nav-links{display:none;}
+    .hamburger{display:flex;}
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    min-height:100vh;
+    display:flex;align-items:center;
+    padding:130px 6vw 60px;
+    gap:60px;
+    perspective:1400px;
+    position:relative;
+  }
+  .hero-left{flex:1;min-width:300px;position:relative;z-index:2;}
+  .hero-right{flex:1;min-width:280px;display:flex;justify-content:center;}
+  .term-tag{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:var(--mono);font-size:12px;color:var(--teal);
+    border:1px solid var(--teal-dim);border-radius:20px;
+    padding:6px 16px;margin-bottom:26px;
+    background:rgba(45,212,191,0.05);
+  }
+  .dot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:pulse 1.6s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+
+  h1.headline{
+    font-family:var(--mono);
+    font-size:clamp(30px,4.6vw,54px);
+    font-weight:700;
+    line-height:1.16;
+    letter-spacing:-1px;
+    margin-bottom:20px;
+  }
+  h1.headline .cursor-blink{
+    display:inline-block;width:12px;height:0.85em;background:var(--teal);
+    animation:blink 1s step-end infinite;vertical-align:text-bottom;margin-left:4px;
+  }
+  @keyframes blink{50%{opacity:0;}}
+  .headline .fn{color:var(--muted2);}
+  .headline .name{
+    background:linear-gradient(120deg,var(--text) 40%,var(--teal));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .headline .quote{color:var(--amber);}
+
+  .sub{
+    font-family:var(--sans);
+    font-size:17px;color:var(--muted);
+    max-width:540px;line-height:1.65;margin-bottom:30px;
+  }
+  .sub b{color:var(--text);font-weight:600;}
+
+  .cta-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:34px;}
+  .btn{
+    font-family:var(--mono);font-size:13px;font-weight:600;
+    padding:13px 24px;border-radius:7px;
+    display:inline-flex;align-items:center;gap:8px;
+    transition:transform .2s, box-shadow .2s, background .2s, border-color .2s;
+    cursor:pointer;
+  }
+  .btn-primary{background:var(--teal);color:#001410;}
+  .btn-primary:hover{transform:translateY(-3px);box-shadow:0 10px 28px var(--teal-glow);}
+  .btn-outline{border:1px solid var(--border-bright);color:var(--text);}
+  .btn-outline:hover{border-color:var(--teal);color:var(--teal);transform:translateY(-3px);}
+
+  .stat-row{display:flex;gap:32px;flex-wrap:wrap;}
+  .stat{font-family:var(--mono);}
+  .stat-num{font-size:24px;font-weight:700;color:var(--text);}
+  .stat-num span{color:var(--teal);}
+  .stat-label{font-size:11px;color:var(--muted2);text-transform:uppercase;letter-spacing:1px;margin-top:2px;}
+
+  /* ---------- 3D ISOMETRIC STACK ---------- */
+  .iso-wrap{
+    width:400px;height:400px;
+    perspective:1000px;
+    display:flex;align-items:center;justify-content:center;
+    position:relative;
+  }
+  .iso-wrap::before{
+    content:'';position:absolute;width:280px;height:280px;border-radius:50%;
+    background:radial-gradient(circle, rgba(45,212,191,0.10), transparent 70%);
+    filter:blur(10px);
+  }
+  .iso-stack{
+    position:relative;
+    width:220px;height:220px;
+    transform-style:preserve-3d;
+    transform:rotateX(55deg) rotateZ(45deg);
+    transition:transform .15s ease-out;
+  }
+  .iso-layer{
+    position:absolute;
+    width:220px;height:220px;
+    border:1px solid var(--border-bright);
+    border-radius:10px;
+    backdrop-filter:blur(4px);
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:1px;
+    box-shadow:0 0 0 1px rgba(255,255,255,0.02) inset, 0 20px 40px rgba(0,0,0,0.4);
+  }
+  .iso-layer span{transform:rotateZ(-45deg) rotateX(-55deg);white-space:nowrap;}
+  .l1{background:rgba(45,212,191,0.12);color:var(--teal);transform:translateZ(0px);}
+  .l2{background:rgba(245,166,35,0.12);color:var(--amber);transform:translateZ(42px);}
+  .l3{background:rgba(139,148,255,0.12);color:var(--violet);transform:translateZ(84px);}
+  .l4{background:rgba(237,241,245,0.09);color:var(--text);transform:translateZ(126px);}
+  .iso-caption{
+    position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+    font-family:var(--mono);font-size:11px;color:var(--muted2);
+  }
+
+  .scroll-hint{
+    position:absolute;bottom:24px;left:50%;transform:translateX(-50%);
+    font-family:var(--mono);font-size:11px;color:var(--muted2);
+    display:flex;flex-direction:column;align-items:center;gap:6px;
+    animation:bob 2s ease-in-out infinite;
+  }
+  @keyframes bob{0%,100%{transform:translate(-50%,0);}50%{transform:translate(-50%,6px);}}
+
+  /* ---------- SECTION SHELL ---------- */
+  section{padding:110px 6vw;max-width:1180px;margin:0 auto;position:relative;}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:52px;}
+  .sec-num{font-family:var(--mono);color:var(--teal);font-size:13px;}
+  .sec-title{font-family:var(--mono);font-size:27px;font-weight:600;}
+  .sec-rule{flex:1;height:1px;background:linear-gradient(90deg,var(--border-bright),transparent);}
+
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.2,.7,.3,1), transform .7s cubic-bezier(.2,.7,.3,1);}
+  .reveal.visible{opacity:1;transform:translateY(0);}
+
+  /* ---------- ABOUT / TERMINAL WINDOW ---------- */
+  .term-window{
+    background:var(--bg-panel);
+    border:1px solid var(--border);
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 24px 70px rgba(0,0,0,0.4);
+  }
+  .term-bar{
+    display:flex;align-items:center;gap:8px;
+    padding:13px 18px;background:var(--bg-panel2);
+    border-bottom:1px solid var(--border);
+  }
+  .tb-dot{width:11px;height:11px;border-radius:50%;}
+  .tb-dot.r{background:#FF5F57;}.tb-dot.y{background:#FEBC2E;}.tb-dot.g{background:#28C840;}
+  .term-bar span{margin-left:12px;font-family:var(--mono);font-size:12px;color:var(--muted);}
+  .term-body{padding:28px 30px;font-family:var(--mono);font-size:14.5px;line-height:1.95;color:var(--muted);}
+  .term-body .cmd{color:var(--teal);}
+  .term-body .path{color:var(--amber);}
+  .term-body p{margin-bottom:6px;}
+  .term-body .out{color:var(--text);}
+
+  /* ---------- EXPERIENCE / TIMELINE ---------- */
+  .exp-list{display:flex;flex-direction:column;gap:0;}
+  .exp-item{
+    display:grid;grid-template-columns:150px 1fr;gap:28px;
+    padding:28px 0;border-top:1px solid var(--border);
+    transition:background .25s;
+  }
+  .exp-item:first-child{border-top:none;}
+  .exp-item:hover{background:rgba(45,212,191,0.02);}
+  .exp-date{font-family:var(--mono);font-size:12.5px;color:var(--muted2);padding-top:2px;}
+  .exp-role{font-family:var(--mono);font-size:17px;font-weight:600;color:var(--text);margin-bottom:6px;}
+  .exp-org{font-size:13.5px;color:var(--teal);margin-bottom:10px;font-weight:600;}
+  .exp-desc{font-size:14.5px;color:var(--muted);line-height:1.7;max-width:620px;}
+  @media(max-width:640px){.exp-item{grid-template-columns:1fr;gap:8px;}}
+
+  /* ---------- STACK / SKILLS ---------- */
+  .ps-table{
+    background:var(--bg-panel);border:1px solid var(--border);border-radius:12px;overflow:hidden;
+    box-shadow:0 24px 70px rgba(0,0,0,0.3);
+  }
+  .ps-row-head, .ps-row{
+    display:grid;grid-template-columns:2fr 1.4fr 3fr 1fr;
+    padding:15px 22px;align-items:center;gap:16px;
+  }
+  .ps-row-head{
+    font-family:var(--mono);font-size:11px;color:var(--muted2);text-transform:uppercase;letter-spacing:1px;
+    border-bottom:1px solid var(--border);
+  }
+  .ps-row{border-bottom:1px solid var(--border);font-family:var(--mono);font-size:13.5px;transition:background .2s;}
+  .ps-row:last-child{border-bottom:none;}
+  .ps-row:hover{background:rgba(45,212,191,0.035);}
+  .ps-name{color:var(--text);font-weight:600;}
+  .ps-status{color:var(--teal);font-size:12px;}
+  .ps-bar-track{height:6px;background:var(--bg);border-radius:4px;overflow:hidden;border:1px solid var(--border);}
+  .ps-bar-fill{height:100%;background:linear-gradient(90deg,var(--teal-dim),var(--teal));border-radius:4px;width:0%;transition:width 1.4s cubic-bezier(.2,.8,.2,1);box-shadow:0 0 10px var(--teal-glow);}
+  .ps-pct{color:var(--muted);text-align:right;}
+  @media(max-width:640px){
+    .ps-row-head{display:none;}
+    .ps-row{grid-template-columns:1fr;gap:6px;}
+  }
+
+  /* ---------- PROJECTS (3D TILT) ---------- */
+  .proj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px;}
+  .tilt-card{
+    position:relative;
+    background:var(--bg-panel);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:30px;
+    transform-style:preserve-3d;
+    transition:transform .1s ease-out, border-color .3s, box-shadow .3s;
+    overflow:hidden;
+  }
+  .tilt-card:hover{border-color:var(--border-bright);box-shadow:0 30px 60px rgba(0,0,0,0.35);}
+  .tilt-card::before{
+    content:'';position:absolute;inset:0;
+    background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%), rgba(45,212,191,0.09), transparent 60%);
+    opacity:0;transition:opacity .3s;pointer-events:none;
+  }
+  .tilt-card:hover::before{opacity:1;}
+  .tc-idx{
+    font-family:var(--mono);font-size:12px;color:var(--muted2);
+    position:absolute;top:26px;right:28px;
+  }
+  .tc-tag{font-family:var(--mono);font-size:11px;color:var(--amber);letter-spacing:1px;margin-bottom:16px;display:block;}
+  .tc-title{font-family:var(--mono);font-size:18.5px;font-weight:600;margin-bottom:13px;line-height:1.4;}
+  .tc-desc{font-size:14px;color:var(--muted);line-height:1.68;margin-bottom:20px;}
+  .tc-tools{display:flex;flex-wrap:wrap;gap:8px;}
+  .tc-tools span{
+    font-family:var(--mono);font-size:11px;color:var(--muted);
+    border:1px solid var(--border-bright);border-radius:5px;padding:4px 10px;
+  }
+
+  /* ---------- CERTS / PIPELINE ---------- */
+  .pipeline{display:flex;flex-direction:column;gap:0;}
+  .pl-stage{
+    display:flex;gap:22px;padding:26px 0;border-left:2px solid var(--border-bright);
+    padding-left:32px;position:relative;
+  }
+  .pl-stage:last-child{border-left:2px solid transparent;}
+  .pl-node{
+    position:absolute;left:-11px;top:26px;
+    width:20px;height:20px;border-radius:50%;
+    background:var(--bg-panel);border:2px solid var(--teal);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 0 14px var(--teal-glow);
+  }
+  .pl-node::after{content:'';width:8px;height:8px;border-radius:50%;background:var(--teal);}
+  .pl-content{flex:1;}
+  .pl-stage-label{font-family:var(--mono);font-size:11px;color:var(--muted2);letter-spacing:1px;margin-bottom:6px;}
+  .pl-title{font-family:var(--mono);font-size:16.5px;font-weight:600;color:var(--text);margin-bottom:6px;}
+  .pl-meta{font-size:13.5px;color:var(--muted);line-height:1.6;}
+  .pl-badge{
+    display:inline-block;margin-top:11px;font-family:var(--mono);font-size:11px;
+    color:var(--teal);border:1px solid var(--teal-dim);border-radius:5px;padding:4px 11px;
+    background:rgba(45,212,191,0.06);
+  }
+
+  /* ---------- CONTACT ---------- */
+  .contact-box{
+    position:relative;
+    background:var(--bg-panel);border:1px solid var(--border);border-radius:16px;
+    padding:52px 40px;text-align:center;
+    background-image:radial-gradient(circle at 50% 0%, rgba(45,212,191,0.08), transparent 60%);
+    overflow:hidden;
+  }
+  .contact-box::before{
+    content:'';position:absolute;top:-2px;left:10%;right:10%;height:2px;
+    background:linear-gradient(90deg,transparent,var(--teal),transparent);
+  }
+  .contact-cmd{font-family:var(--mono);font-size:14px;color:var(--muted);margin-bottom:18px;}
+  .contact-cmd .k{color:var(--teal);}
+  .contact-title{font-family:var(--mono);font-size:30px;font-weight:700;margin-bottom:14px;}
+  .contact-sub{color:var(--muted);max-width:480px;margin:0 auto 32px;font-size:15px;line-height:1.65;}
+  .contact-links{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+
+  footer{
+    text-align:center;padding:44px 6vw 60px;
+    font-family:var(--mono);font-size:12px;color:var(--muted2);
+    border-top:1px solid var(--border);margin-top:40px;
+  }
+  footer .heart{color:var(--amber);}
+  .footer-links{display:flex;gap:20px;justify-content:center;margin-bottom:18px;}
+  .footer-links a{
+    width:38px;height:38px;border-radius:8px;border:1px solid var(--border-bright);
+    display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--muted);
+    transition:.2s;
+  }
+  .footer-links a:hover{color:var(--teal);border-color:var(--teal-dim);transform:translateY(-3px);}
+
+  /* back to top */
+  #toTop{
+    position:fixed;bottom:26px;right:26px;width:44px;height:44px;border-radius:50%;
+    background:var(--bg-panel);border:1px solid var(--border-bright);color:var(--teal);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:80;
+    opacity:0;pointer-events:none;transition:.3s;font-size:16px;
+  }
+  #toTop.show{opacity:1;pointer-events:auto;}
+  #toTop:hover{transform:translateY(-4px);box-shadow:0 8px 22px var(--teal-glow);}
+</style>
+</head>
+<body>
+
+<div id="cursorGlow"></div>
+
+<div id="loader">
+  <div class="loader-term">
+    <div>$ ssh mk@bhiwandi ~ portfolio</div>
+    <div>$ terraform init</div>
+    <div>$ terraform apply --auto-approve</div>
+    <div style="color:var(--text)">✓ infrastructure ready</div>
+  </div>
+  <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+  <div class="loader-sub">compiling mansoori_kaif.portfolio ...</div>
+</div>
+
+<nav id="mainNav">
+  <div class="logo"><div class="logo-badge">mk</div>mansoori kaif</div>
+  <div class="nav-links" id="navLinks">
+    <a href="#about">whoami</a>
+    <a href="#experience">experience</a>
+    <a href="#stack">stack</a>
+    <a href="#projects">projects</a>
+    <a href="#certs">certs</a>
+    <a href="#contact" class="nav-cta">contact</a>
+  </div>
+  <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about">whoami</a>
+  <a href="#experience">experience</a>
+  <a href="#stack">stack</a>
+  <a href="#projects">projects</a>
+  <a href="#certs">certs</a>
+  <a href="#contact">contact</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="term-tag"><span class="dot"></span> open to cloud / devops roles · mumbai, in</div>
+    <h1 class="headline">
+      <span class="fn">$</span> <span class="name">Mansoori Mohd Kaif</span><br>
+      <span class="quote">— building infra, one apply at a time.</span>
+      <span class="cursor-blink"></span>
+    </h1>
+    <p class="sub">
+      <b>Cloud & DevOps enthusiast</b> from Bhiwandi, Maharashtra. BSc IT graduate, AWS Cloud Practitioner
+      (92%, Grade A+), currently deep in <b>Terraform, Docker, Kubernetes & CI/CD</b> — learning infrastructure
+      by breaking it first, then fixing it properly.
+    </p>
+    <div class="cta-row">
+      <a class="btn btn-primary" https://drive.google.com/file/d/11rYckkMlgI24jrkIZFt5xkFQ-nzInaiv/view?usp=sharing" target="_blank">↓ resume.pdf</a>
+      <a class="btn btn-outline" href="mailto:mansoorikaif365@gmail.com">✉ say hello</a>
+      <a class="btn btn-outline" href="https://linkedin.com/in/mohdkaifmansoori" target="_blank">in/ linkedin</a>
+    </div>
+    <div class="stat-row">
+      <div class="stat"><div class="stat-num"><span>92</span>%</div><div class="stat-label">AWS Cert Score</div></div>
+      <div class="stat"><div class="stat-num"><span>6</span></div><div class="stat-label">Certifications</div></div>
+      <div class="stat"><div class="stat-num"><span>5+</span></div><div class="stat-label">Terraform Levels</div></div>
+      <div class="stat"><div class="stat-num"><span>10</span>+</div><div class="stat-label">Tools & Stacks</div></div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="iso-wrap" id="isoWrap">
+      <div class="iso-stack" id="isoStack">
+        <div class="iso-layer l1"><span>TERRAFORM · IaC</span></div>
+        <div class="iso-layer l2"><span>DOCKER · CONTAINERS</span></div>
+        <div class="iso-layer l3"><span>KUBERNETES · EKS</span></div>
+        <div class="iso-layer l4"><span>AWS · EC2 / S3 / IAM</span></div>
+      </div>
+      <div class="iso-caption">move your cursor →</div>
+    </div>
+  </div>
+  <div class="scroll-hint">↓ scroll</div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="sec-head reveal">
+    <span class="sec-num">01</span>
+    <span class="sec-title">whoami</span>
+    <div class="sec-rule"></div>
+  </div>
+  <div class="term-window reveal">
+    <div class="term-bar">
+      <span class="tb-dot r"></span><span class="tb-dot y"></span><span class="tb-dot g"></span>
+      <span>bash — mk@bhiwandi: ~</span>
+    </div>
+    <div class="term-body">
+      <p><span class="cmd">$</span> cat about.txt</p>
+      <p class="out">BSc Information Technology — University of Mumbai (2025).</p>
+      <p class="out">AWS Certified Cloud Practitioner via Capgemini & AWS re/Start (EduBridge), Score 92%, Grade A+.</p>
+      <p class="out">Comfortable across Linux server administration, shell scripting, and Docker fundamentals.</p>
+      <p class="out">Currently in an active DevOps track: Terraform (Levels 1–4), Jenkins pipelines, Kubernetes on</p>
+      <p class="out">Minikube, GitHub Actions CI/CD, and Selenium automation — learning by building, not copying.</p>
+      <p>&nbsp;</p>
+      <p><span class="cmd">$</span> echo $LOOKING_FOR</p>
+      <p class="out"><span class="path">"Entry-level Cloud Support / DevOps Engineer role"</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="sec-head reveal">
+    <span class="sec-num">02</span>
+    <span class="sec-title">experience</span>
+    <div class="sec-rule"></div>
+  </div>
+  <div class="exp-list reveal">
+    <div class="exp-item">
+      <div class="exp-date">2024 — Present</div>
+      <div>
+        <div class="exp-role">Computer & IT Teacher</div>
+        <div class="exp-org">Bright Education, Bhiwandi</div>
+        <div class="exp-desc">Run a computer & IT training institute teaching students from Std VII through XII across SSC, CBSE, and Junior College streams — covering computer fundamentals, MS Office, and applied IT skills, alongside producing structured training manuals and practice material.</div>
+      </div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-date">Jul 2025</div>
+      <div>
+        <div class="exp-role">AWS Cloud Practitioner Track</div>
+        <div class="exp-org">Capgemini & AWS re/Start, via EduBridge</div>
+        <div class="exp-desc">Completed an intensive cloud fundamentals program covering EC2, S3, IAM, VPC, and core AWS services — graduated with a 92% score and Grade A+, followed by hands-on projects applying the concepts on AWS Free Tier.</div>
+      </div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-date">Ongoing</div>
+      <div>
+        <div class="exp-role">Self-Directed DevOps Engineering</div>
+        <div class="exp-org">Independent Study</div>
+        <div class="exp-desc">Building real infrastructure with Terraform (VPC, EC2, EKS), setting up Jenkins CI/CD pipelines with CloudWatch/SNS monitoring, and practicing Kubernetes, GitHub Actions, and Selenium — all through hands-on labs rather than passive tutorials.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STACK -->
+<section id="stack">
+  <div class="sec-head reveal">
+    <span class="sec-num">03</span>
+    <span class="sec-title">docker ps --skills</span>
+    <div class="sec-rule"></div>
+  </div>
+  <div class="ps-table reveal" id="psTable">
+    <div class="ps-row-head">
+      <div>skill</div><div>category</div><div>proficiency</div><div>status</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="sec-head reveal">
+    <span class="sec-num">04</span>
+    <span class="sec-title">featured builds</span>
+    <div class="sec-rule"></div>
+  </div>
+  <div class="proj-grid">
+    <div class="tilt-card reveal">
+      <span class="tc-idx">01</span>
+      <span class="tc-tag">// infra</span>
+      <div class="tc-title">Linux Server Setup & Management</div>
+      <p class="tc-desc">Launched an EC2 instance on AWS Free Tier, configured an Ubuntu server over SSH, and wrote Bash scripts to automate log cleanup and user management.</p>
+      <div class="tc-tools"><span>Ubuntu</span><span>AWS EC2</span><span>Shell Scripting</span><span>SSH</span></div>
+    </div>
+    <div class="tilt-card reveal">
+      <span class="tc-idx">02</span>
+      <span class="tc-tag">// cloud</span>
+      <div class="tc-title">AWS Cloud Infrastructure — EC2, S3, IAM</div>
+      <p class="tc-desc">Configured an S3 bucket with access-control policies, set up least-privilege IAM roles, and built a custom VPC with Security Groups for an EC2-hosted web server.</p>
+      <div class="tc-tools"><span>AWS Free Tier</span><span>IAM</span><span>S3</span><span>VPC</span><span>Security Groups</span></div>
+    </div>
+    <div class="tilt-card reveal">
+      <span class="tc-idx">03</span>
+      <span class="tc-tag">// in progress</span>
+      <div class="tc-title">Terraform + EKS Monitoring Pipeline</div>
+      <p class="tc-desc">Building a multi-file Terraform setup provisioning VPC + EKS via community modules, alongside a Jenkins monitoring stack on EC2 with CloudWatch and SNS alerting.</p>
+      <div class="tc-tools"><span>Terraform</span><span>EKS</span><span>CloudWatch</span><span>SNS</span><span>Jenkins</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTS -->
+<section id="certs">
+  <div class="sec-head reveal">
+    <span class="sec-num">05</span>
+    <span class="sec-title">certification pipeline</span>
+    <div class="sec-rule"></div>
+  </div>
+  <div class="pipeline reveal">
+    <div class="pl-stage">
+      <div class="pl-node"></div>
+      <div class="pl-content">
+        <div class="pl-stage-label">STAGE · MAY–JUL 2025</div>
+        <div class="pl-title">Data Analytics — Project Completion</div>
+        <div class="pl-meta">EduFYI Tech Solutions — ISO 9001:2015 Certified</div>
+        <span class="pl-badge">✓ passed</span>
+      </div>
+    </div>
+    <div class="pl-stage">
+      <div class="pl-node"></div>
+      <div class="pl-content">
+        <div class="pl-stage-label">STAGE · JUN 2025</div>
+        <div class="pl-title">Networking 101: Network Essentials</div>
+        <div class="pl-meta">EduBridge — ID: EON453174S1230</div>
+        <span class="pl-badge">✓ passed</span>
+      </div>
+    </div>
+    <div class="pl-stage">
+      <div class="pl-node"></div>
+      <div class="pl-content">
+        <div class="pl-stage-label">STAGE · JUL 2025</div>
+        <div class="pl-title">AWS Cloud Practitioner</div>
+        <div class="pl-meta">Capgemini & AWS re/Start, EduBridge — Score 92%, Grade A+ — ID: EBEON04251095676</div>
+        <span class="pl-badge">✓ passed — A+</span>
+      </div>
+    </div>
+    <div class="pl-stage">
+      <div class="pl-node"></div>
+      <div class="pl-content">
+        <div class="pl-stage-label">STAGE · NOV 2025</div>
+        <div class="pl-title">Python Using AI Workshop</div>
+        <div class="pl-meta">AI For Techies — building & debugging Python with AI-assisted tools</div>
+        <span class="pl-badge">✓ passed</span>
+      </div>
+    </div>
+    <div class="pl-stage">
+      <div class="pl-node"></div>
+      <div class="pl-content">
+        <div class="pl-stage-label">STAGE · JAN–MAR 2026</div>
+        <div class="pl-title">Data Processing & Business Analysis</div>
+        <div class="pl-meta">Anudip Foundation / CitiusTech, Kalyan — 196 hrs, Grade A</div>
+        <span class="pl-badge">✓ passed — A</span>
+      </div>
+    </div>
+    <div class="pl-stage">
+      <div class="pl-node"></div>
+      <div class="pl-content">
+        <div class="pl-stage-label">STAGE · AUG 2026</div>
+        <div class="pl-title">AI Classroom Foundation Course</div>
+        <div class="pl-meta">Jio Institute, powered by JioPC — ID: uhbN4FIQ6MKH</div>
+        <span class="pl-badge">✓ passed</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-box reveal">
+    <div class="contact-cmd"><span class="k">$</span> curl -X POST /contact --data "lets-build-something-together"</div>
+    <div class="contact-title">Let's talk infra.</div>
+    <p class="contact-sub">Open to entry-level Cloud Support and DevOps Engineer roles. Reach out — happy to walk through any project on this page.</p>
+    <div class="contact-links">
+      <a class="btn btn-primary" href="mailto:mansoorikaif365@gmail.com">✉ mansoorikaif365@gmail.com</a>
+      <a class="btn btn-outline" href="https://linkedin.com/in/mohdkaifmansoori" target="_blank">in/mohdkaifmansoori</a>
+      <a class="btn btn-outline" href="https://github.com/Mohd-kaif123" target="_blank">↗ github.com/Mohd-kaif123</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-links">
+    <a href="mailto:mansoorikaif365@gmail.com" title="Email">✉</a>
+    <a href="https://linkedin.com/in/mohdkaifmansoori" target="_blank" title="LinkedIn">in</a>
+    <a href="https://github.com/Mohd-kaif123" target="_blank" title="GitHub">gh</a>
+  </div>
+  built with <span class="heart">♥</span> and a lot of terraform apply — © 2026 Mansoori Mohd Kaif
+</footer>
+
+<div id="toTop">↑</div>
+
+<script>
+  // ---- Loader ----
+  window.addEventListener('load', ()=>{
+    setTimeout(()=>{ document.getElementById('loader').classList.add('hide'); }, 1900);
+  });
+
+  // ---- Cursor glow ----
+  const glow = document.getElementById('cursorGlow');
+  document.addEventListener('mousemove', (e)=>{
+    glow.style.left = e.clientX + 'px';
+    glow.style.top = e.clientY + 'px';
+  });
+
+  // ---- Mobile menu ----
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', ()=>{
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+  });
+  mobileMenu.querySelectorAll('a').forEach(a=>{
+    a.addEventListener('click', ()=>{
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+    });
+  });
+
+  // ---- Skills data (ps table rows) ----
+  const skills = [
+    ["AWS","Cloud",90],["Linux","OS",85],["Docker","Containers",78],
+    ["Terraform","IaC",70],["Kubernetes","Orchestration",60],
+    ["Jenkins","CI/CD",65],["Python","Language",75],
+    ["SQL","Database",72],["Git / GitHub","VCS",85],["Bash","Scripting",80]
+  ];
+  const table = document.getElementById('psTable');
+  skills.forEach(([name,cat,pct])=>{
+    const row = document.createElement('div');
+    row.className = 'ps-row';
+    row.innerHTML = `
+      <div class="ps-name">${name}</div>
+      <div class="ps-status">${cat}</div>
+      <div class="ps-bar-track"><div class="ps-bar-fill" data-pct="${pct}"></div></div>
+      <div class="ps-pct">${pct}%</div>
+    `;
+    table.appendChild(row);
+  });
+
+  // ---- Scroll reveal ----
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('visible');
+        if(e.target.id === 'psTable'){
+          document.querySelectorAll('.ps-bar-fill').forEach(bar=>{
+            bar.style.width = bar.dataset.pct + '%';
+          });
+        }
+        io.unobserve(e.target);
+      }
+    });
+  },{threshold:0.15});
+  revealEls.forEach(el=>io.observe(el));
+
+  // ---- Active nav link on scroll ----
+  const sections = document.querySelectorAll('section[id]');
+  const navA = document.querySelectorAll('.nav-links a[href^="#"]');
+  const navObs = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        navA.forEach(a=>a.classList.remove('active'));
+        const match = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
+        if(match) match.classList.add('active');
+      }
+    });
+  },{rootMargin:'-40% 0px -50% 0px'});
+  sections.forEach(s=>navObs.observe(s));
+
+  // ---- Isometric hero parallax ----
+  const isoWrap = document.getElementById('isoWrap');
+  const isoStack = document.getElementById('isoStack');
+  isoWrap.addEventListener('mousemove', (e)=>{
+    const r = isoWrap.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    isoStack.style.transform = `rotateX(${55 - y*20}deg) rotateZ(${45 + x*20}deg)`;
+  });
+  isoWrap.addEventListener('mouseleave', ()=>{
+    isoStack.style.transform = 'rotateX(55deg) rotateZ(45deg)';
+  });
+
+  // ---- Tilt cards ----
+  document.querySelectorAll('.tilt-card').forEach(card=>{
+    card.addEventListener('mousemove',(e)=>{
+      const r = card.getBoundingClientRect();
+      const x = e.clientX - r.left, y = e.clientY - r.top;
+      const cx = x - r.width/2, cy = y - r.height/2;
+      card.style.transform = `rotateX(${(-cy/18)}deg) rotateY(${(cx/18)}deg) translateZ(6px)`;
+      card.style.setProperty('--mx', x+'px');
+      card.style.setProperty('--my', y+'px');
+    });
+    card.addEventListener('mouseleave',()=>{
+      card.style.transform = 'rotateX(0deg) rotateY(0deg) translateZ(0)';
+    });
+  });
+
+  // ---- Nav bg on scroll + back to top ----
+  const nav = document.getElementById('mainNav');
+  const toTop = document.getElementById('toTop');
+  window.addEventListener('scroll', ()=>{
+    if(window.scrollY > 40){ nav.style.borderBottomColor = 'var(--border-bright)'; }
+    else { nav.style.borderBottomColor = 'var(--border)'; }
+    toTop.classList.toggle('show', window.scrollY > 600);
+  });
+  toTop.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
+</script>
+
+</body>
+</html>
