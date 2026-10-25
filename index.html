@@ -266,6 +266,7 @@
   .tb-dot{width:11px;height:11px;border-radius:50%;}
   .tb-dot.r{background:#FF5F57;}.tb-dot.y{background:#FEBC2E;}.tb-dot.g{background:#28C840;}
   .term-bar span{margin-left:12px;font-family:var(--mono);font-size:12px;color:var(--muted);}
+  .term-bar .tb-dot{margin-left:0;}
   .term-body{padding:28px 30px;font-family:var(--mono);font-size:14.5px;line-height:1.95;color:var(--muted);}
   .term-body .cmd{color:var(--teal);}
   .term-body .path{color:var(--amber);}
@@ -344,6 +345,84 @@
     font-family:var(--mono);font-size:11px;color:var(--muted);
     border:1px solid var(--border-bright);border-radius:5px;padding:4px 10px;
   }
+
+  /* ---------- FEATURED PROJECT (new) ---------- */
+  .tilt-card.featured{grid-column:1 / -1;padding:34px;}
+  .tilt-card.featured:hover{transform:none;}
+  .tilt-card.featured .tc-title{font-size:22px;padding-right:50px;}
+  .tilt-card.featured .tc-desc{font-size:15px;max-width:720px;}
+
+  .shots{display:grid;grid-template-columns:2fr 1fr 1fr;gap:14px;margin-bottom:26px;}
+  .shot{
+    position:relative;margin:0;border:1px solid var(--border-bright);border-radius:10px;overflow:hidden;
+    background:var(--bg-panel2);cursor:zoom-in;min-height:150px;
+    display:flex;align-items:center;justify-content:center;
+    transition:border-color .25s;
+  }
+  .shot:hover{border-color:var(--teal-dim);}
+  .shot img{width:100%;height:100%;object-fit:cover;display:block;}
+  .shot.arch img{object-fit:contain;background:#fff;}
+  .shot figcaption{
+    position:absolute;left:8px;bottom:8px;
+    font-family:var(--mono);font-size:10.5px;color:var(--text);
+    background:rgba(8,10,14,0.82);border:1px solid var(--border-bright);
+    border-radius:4px;padding:3px 8px;
+  }
+  .shot.missing img{display:none;}
+  .shot.missing::after{
+    content:attr(data-file);font-family:var(--mono);font-size:11px;color:var(--muted2);padding:12px;text-align:center;
+  }
+
+  .fp-cols{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin:4px 0 24px;}
+  .fp-box{border-top:1px solid var(--border-bright);padding-top:16px;}
+  .fp-label{font-family:var(--mono);font-size:12px;color:var(--teal);margin-bottom:10px;display:block;}
+  .fp-box p{font-size:14px;color:var(--muted);line-height:1.7;}
+  .fp-box ul{list-style:none;}
+  .fp-box li{font-size:14px;color:var(--muted);line-height:1.7;padding-left:18px;position:relative;margin-bottom:4px;}
+  .fp-box li::before{content:'›';position:absolute;left:0;color:var(--teal);font-family:var(--mono);}
+  .fp-links{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px;}
+
+  @media(max-width:760px){
+    .shots{grid-template-columns:1fr;}
+    .fp-cols{grid-template-columns:1fr;}
+    .tilt-card.featured{padding:24px;}
+  }
+
+  /* ---------- PROBLEMS TABLE (new) ---------- */
+  .debug-wrap{margin-top:44px;}
+  .debug-title{font-family:var(--mono);font-size:16px;font-weight:600;margin-bottom:6px;}
+  .debug-sub{font-size:13.5px;color:var(--muted);margin-bottom:18px;line-height:1.6;}
+  .debug-table{
+    background:var(--bg-panel);border:1px solid var(--border);border-radius:12px;overflow:hidden;
+    box-shadow:0 24px 70px rgba(0,0,0,0.3);
+  }
+  .dt-head, .dt-row{
+    display:grid;grid-template-columns:44px 1.5fr 2fr 2.4fr;
+    padding:15px 22px;gap:18px;align-items:start;
+  }
+  .dt-head{
+    font-family:var(--mono);font-size:11px;color:var(--muted2);text-transform:uppercase;letter-spacing:1px;
+    border-bottom:1px solid var(--border);
+  }
+  .dt-row{border-bottom:1px solid var(--border);font-size:13.5px;line-height:1.6;color:var(--muted);transition:background .2s;}
+  .dt-row:last-child{border-bottom:none;}
+  .dt-row:hover{background:rgba(45,212,191,0.035);}
+  .dt-n{font-family:var(--mono);color:var(--teal);font-size:13px;}
+  .dt-prob{color:var(--text);font-weight:600;}
+  .dt-tag{display:none;font-family:var(--mono);font-size:10.5px;color:var(--muted2);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;}
+  @media(max-width:760px){
+    .dt-head{display:none;}
+    .dt-row{grid-template-columns:1fr;gap:10px;}
+    .dt-tag{display:block;}
+  }
+
+  /* ---------- LIGHTBOX (new) ---------- */
+  #lightbox{
+    position:fixed;inset:0;z-index:300;background:rgba(4,6,9,0.94);
+    display:none;align-items:center;justify-content:center;padding:4vw;cursor:zoom-out;
+  }
+  #lightbox.open{display:flex;}
+  #lightbox img{max-width:100%;max-height:90vh;border-radius:8px;border:1px solid var(--border-bright);background:#fff;}
 
   /* ---------- CERTS / PIPELINE ---------- */
   .pipeline{display:flex;flex-direction:column;gap:0;}
@@ -465,7 +544,7 @@
       by breaking it first, then fixing it properly.
     </p>
     <div class="cta-row">
-      <a class="btn btn-primary" https://drive.google.com/file/d/11rYckkMlgI24jrkIZFt5xkFQ-nzInaiv/view?usp=sharing" target="_blank">↓ resume.pdf</a>
+      <a class="btn btn-primary" href="https://drive.google.com/file/d/11rYckkMlgI24jrkIZFt5xkFQ-nzInaiv/view?usp=sharing" target="_blank">↓ resume.pdf</a>
       <a class="btn btn-outline" href="mailto:mansoorikaif365@gmail.com">✉ say hello</a>
       <a class="btn btn-outline" href="https://linkedin.com/in/mohdkaifmansoori" target="_blank">in/ linkedin</a>
     </div>
@@ -574,6 +653,54 @@
     <div class="sec-rule"></div>
   </div>
   <div class="proj-grid">
+
+    <!-- NEW: Serverless File Upload Platform -->
+    <div class="tilt-card featured reveal">
+      <span class="tc-idx">00</span>
+      <span class="tc-tag">// serverless · ci/cd</span>
+      <div class="tc-title">Serverless File Upload Platform on AWS</div>
+      <p class="tc-desc">A serverless app that accepts file uploads, validates them with Lambda and sends an email alert. Built on AWS with Terraform and GitHub Actions.</p>
+
+      <div class="shots">
+        <figure class="shot arch" data-file="images/architecture.png">
+          <img src="images/architecture.png" alt="Architecture diagram of the serverless file upload platform" loading="lazy">
+          <figcaption>architecture</figcaption>
+        </figure>
+        <figure class="shot" data-file="images/01.png">
+          <img src="images/01.png" alt="Screenshot 01 of the file upload platform" loading="lazy">
+          <figcaption>01</figcaption>
+        </figure>
+        <figure class="shot" data-file="images/02.png">
+          <img src="images/02.png" alt="Screenshot 02 of the file upload platform" loading="lazy">
+          <figcaption>02</figcaption>
+        </figure>
+      </div>
+
+      <div class="tc-tools">
+        <span>AWS</span><span>Terraform</span><span>GitHub Actions</span><span>Lambda</span><span>S3</span><span>CloudFront</span><span>API Gateway</span><span>SNS</span>
+      </div>
+
+      <div class="fp-cols" style="margin-top:26px;">
+        <div class="fp-box">
+          <span class="fp-label">// what I did</span>
+          <ul>
+            <li>Deployed the infrastructure with Terraform.</li>
+            <li>Set up 3 CI/CD pipelines.</li>
+            <li>Debugged 7 real problems.</li>
+          </ul>
+        </div>
+        <div class="fp-box">
+          <span class="fp-label">// what I learned</span>
+          <p>Layer-by-layer debugging, Terraform state, and CI/CD basics.</p>
+        </div>
+      </div>
+
+      <div class="fp-links">
+        <a class="btn btn-primary" href="https://github.com/kaif-mansoori/aws-serverless-upload-terraform-cicd" target="_blank" rel="noopener">↗ GitHub repo</a>
+        <a class="btn btn-outline" href="#debug-log">7 problems & fixes ↓</a>
+      </div>
+    </div>
+
     <div class="tilt-card reveal">
       <span class="tc-idx">01</span>
       <span class="tc-tag">// infra</span>
@@ -594,6 +721,58 @@
       <div class="tc-title">Terraform + EKS Monitoring Pipeline</div>
       <p class="tc-desc">Building a multi-file Terraform setup provisioning VPC + EKS via community modules, alongside a Jenkins monitoring stack on EC2 with CloudWatch and SNS alerting.</p>
       <div class="tc-tools"><span>Terraform</span><span>EKS</span><span>CloudWatch</span><span>SNS</span><span>Jenkins</span></div>
+    </div>
+  </div>
+
+  <!-- NEW: Problems and how I solved them -->
+  <div class="debug-wrap reveal" id="debug-log">
+    <div class="debug-title">Your problems and how you solved them</div>
+    <p class="debug-sub">Serverless File Upload Platform — 7 real problems, their causes and fixes.</p>
+    <div class="debug-table">
+      <div class="dt-head"><div>#</div><div>Problem</div><div>Cause</div><div>Fix</div></div>
+
+      <div class="dt-row">
+        <div class="dt-n">1</div>
+        <div class="dt-prob">Bucket and init errors</div>
+        <div><span class="dt-tag">cause</span>The template had its author’s names hard-coded</div>
+        <div><span class="dt-tag">fix</span>Used my own bucket names, state bucket and email</div>
+      </div>
+      <div class="dt-row">
+        <div class="dt-n">2</div>
+        <div class="dt-prob">Terraform syntax error</div>
+        <div><span class="dt-tag">cause</span>A block was inside jsonencode()</div>
+        <div><span class="dt-tag">fix</span>Moved it into the stage resource, ran terraform validate</div>
+      </div>
+      <div class="dt-row">
+        <div class="dt-n">3</div>
+        <div class="dt-prob">Frontend and backend workflows failed</div>
+        <div><span class="dt-tag">cause</span>The infrastructure did not exist yet</div>
+        <div><span class="dt-tag">fix</span>Fixed Terraform first, then added the secrets</div>
+      </div>
+      <div class="dt-row">
+        <div class="dt-n">4</div>
+        <div class="dt-prob">Failed to fetch</div>
+        <div><span class="dt-tag">cause</span>API Gateway returned 429, throttling was 0</div>
+        <div><span class="dt-tag">fix</span>Tested with curl, set burst 100 and rate 200, added it to Terraform</div>
+      </div>
+      <div class="dt-row">
+        <div class="dt-n">5</div>
+        <div class="dt-prob">File upload failed</div>
+        <div><span class="dt-tag">cause</span>No CORS rule on the upload bucket</div>
+        <div><span class="dt-tag">fix</span>Added a CORS configuration</div>
+      </div>
+      <div class="dt-row">
+        <div class="dt-n">6</div>
+        <div class="dt-prob">EntityAlreadyExists</div>
+        <div><span class="dt-tag">cause</span>Old resources stayed after I deleted the state</div>
+        <div><span class="dt-tag">fix</span>Deleted the leftovers and re-ran the pipeline</div>
+      </div>
+      <div class="dt-row">
+        <div class="dt-n">7</div>
+        <div class="dt-prob">404 NoSuchKey index.html</div>
+        <div><span class="dt-tag">cause</span>The frontend pipeline had not uploaded the page yet</div>
+        <div><span class="dt-tag">fix</span>Set the new API URL, added secrets, pushed</div>
+      </div>
     </div>
   </div>
 </section>
@@ -686,6 +865,7 @@
   built with <span class="heart">♥</span> and a lot of terraform apply — © 2026 Mansoori Mohd Kaif
 </footer>
 
+<div id="lightbox"><img src="" alt="Enlarged project image"></div>
 <div id="toTop">↑</div>
 
 <script>
@@ -779,8 +959,8 @@
     isoStack.style.transform = 'rotateX(55deg) rotateZ(45deg)';
   });
 
-  // ---- Tilt cards ----
-  document.querySelectorAll('.tilt-card').forEach(card=>{
+  // ---- Tilt cards (featured card excluded) ----
+  document.querySelectorAll('.tilt-card:not(.featured)').forEach(card=>{
     card.addEventListener('mousemove',(e)=>{
       const r = card.getBoundingClientRect();
       const x = e.clientX - r.left, y = e.clientY - r.top;
@@ -793,6 +973,21 @@
       card.style.transform = 'rotateX(0deg) rotateY(0deg) translateZ(0)';
     });
   });
+
+  // ---- Project images: placeholder if file missing + lightbox ----
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = lightbox.querySelector('img');
+  document.querySelectorAll('.shot').forEach(shot=>{
+    const img = shot.querySelector('img');
+    img.addEventListener('error', ()=> shot.classList.add('missing'));
+    shot.addEventListener('click', ()=>{
+      if(shot.classList.contains('missing')) return;
+      lightboxImg.src = img.src;
+      lightbox.classList.add('open');
+    });
+  });
+  lightbox.addEventListener('click', ()=> lightbox.classList.remove('open'));
+  document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') lightbox.classList.remove('open'); });
 
   // ---- Nav bg on scroll + back to top ----
   const nav = document.getElementById('mainNav');
